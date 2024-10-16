@@ -3,6 +3,7 @@ import time
 
 SIZE = 16
 
+
 class Mouse:
     def __init__(self, token="", url="http://127.0.0.1:8801/api/v1"):
         self.token = token
@@ -14,7 +15,9 @@ class Mouse:
         self.direction = "up"
 
     def forward(self):
-        r = requests.post(self.url + "/robot-cells/forward", params={"token": self.token})
+        r = requests.post(
+            self.url + "/robot-cells/forward", params={"token": self.token}
+        )
         if r.status_code != requests.codes.ok:
             raise RuntimeError
         if self.direction == "up":
@@ -32,10 +35,10 @@ class Mouse:
         if r.status_code != requests.codes.ok:
             raise RuntimeError
         next_d = {
-            "up":    "left",
+            "up": "left",
             "right": "up",
-            "left":  "down",
-            "down":  "right",
+            "left": "down",
+            "down": "right",
         }
         self.direction = next_d[self.direction]
 
@@ -44,15 +47,17 @@ class Mouse:
         if r.status_code != requests.codes.ok:
             raise RuntimeError
         next_d = {
-            "up":    "right",
+            "up": "right",
             "right": "down",
-            "left":  "up",
-            "down":  "left",
+            "left": "up",
+            "down": "left",
         }
         self.direction = next_d[self.direction]
 
     def backward(self):
-        r = requests.post(self.url + "/robot-cells/backward", params={"token": self.token})
+        r = requests.post(
+            self.url + "/robot-cells/backward", params={"token": self.token}
+        )
         if r.status_code != requests.codes.ok:
             raise RuntimeError
         if self.direction == "up":
@@ -66,7 +71,9 @@ class Mouse:
         time.sleep(0.1)
 
     def submit_task1(self):
-        r = requests.post(self.url + "/matrix/send", params={"token": self.token}, json=self.maze)
+        r = requests.post(
+            self.url + "/matrix/send", params={"token": self.token}, json=self.maze
+        )
         if r.status_code != requests.codes.ok:
             raise RuntimeError
         print(r.text)
@@ -142,13 +149,17 @@ class Mouse:
                 return
 
     def upd_sensor_data(self):
-        r = requests.get(self.url + "/robot-cells/sensor-data", params={"token": self.token})
+        r = requests.get(
+            self.url + "/robot-cells/sensor-data", params={"token": self.token}
+        )
         if r.status_code != requests.codes.ok:
             raise RuntimeError
         self.data = r.json()
 
     def restart(self):
-        r = requests.post(self.url + "/robot-cells/restart", params={"token": self.token})
+        r = requests.post(
+            self.url + "/robot-cells/restart", params={"token": self.token}
+        )
         if r.status_code != requests.codes.ok:
             raise RuntimeError
 
@@ -167,31 +178,51 @@ class Mouse:
         f, r, l, b = self.get_walls()
         # True if there is wall
         # False if we can pass through
-        up = not ((self.direction == "up" and f != 0) or (self.direction == "right" and l != 0) or (self.direction == "down" and b != 0) or (self.direction == "left" and r != 0))
-        right = not ((self.direction == "up" and r != 0) or (self.direction == "right" and f != 0) or (self.direction == "down" and l != 0) or (self.direction == "left" and b != 0))
-        down = not ((self.direction == "up" and b != 0) or (self.direction == "right" and r != 0) or (self.direction == "down" and f != 0) or (self.direction == "left" and l != 0))
-        left = not ((self.direction == "up" and l != 0) or (self.direction == "right" and b != 0) or (self.direction == "down" and r != 0) or (self.direction == "left" and f != 0))
+        up = not (
+            (self.direction == "up" and f != 0)
+            or (self.direction == "right" and l != 0)
+            or (self.direction == "down" and b != 0)
+            or (self.direction == "left" and r != 0)
+        )
+        right = not (
+            (self.direction == "up" and r != 0)
+            or (self.direction == "right" and f != 0)
+            or (self.direction == "down" and l != 0)
+            or (self.direction == "left" and b != 0)
+        )
+        down = not (
+            (self.direction == "up" and b != 0)
+            or (self.direction == "right" and r != 0)
+            or (self.direction == "down" and f != 0)
+            or (self.direction == "left" and l != 0)
+        )
+        left = not (
+            (self.direction == "up" and l != 0)
+            or (self.direction == "right" and b != 0)
+            or (self.direction == "down" and r != 0)
+            or (self.direction == "left" and f != 0)
+        )
         return up, right, left, down
 
     def fill_cell(self):
         walls = {
             #  (up, right, left, down)
             (False, False, False, False): 0,
-            (False, False, True,  False): 1,
-            (True,  False, False, False): 2,
-            (False, True,  False, False): 3,
-            (False, False, False, True ): 4,
-            (False, False, True,  True ): 5,
-            (False, True,  False, True ): 6,
-            (True,  True,  False, False): 7,
-            (True,  False, True,  False): 8,
-            (False, True,  True,  False): 9,
-            (True,  False, False, True ): 10,
-            (True,  True,  False, True ): 11,
-            (True,  True,  True,  False): 12,
-            (True,  False, True,  True ): 13,
-            (False, True,  True,  True ): 14,
-            (True,  True,  True,  True ): 15,
+            (False, False, True, False): 1,
+            (True, False, False, False): 2,
+            (False, True, False, False): 3,
+            (False, False, False, True): 4,
+            (False, False, True, True): 5,
+            (False, True, False, True): 6,
+            (True, True, False, False): 7,
+            (True, False, True, False): 8,
+            (False, True, True, False): 9,
+            (True, False, False, True): 10,
+            (True, True, False, True): 11,
+            (True, True, True, False): 12,
+            (True, False, True, True): 13,
+            (False, True, True, True): 14,
+            (True, True, True, True): 15,
         }
         self.maze[self.x][self.y] = walls[self.get_abs_walls()]
 
@@ -220,6 +251,8 @@ class Mouse:
             self._fill_maze(visited)
             self.go("up")
 
+
 m = Mouse()
 m.fill_maze()
 m.submit_task1()
+
