@@ -193,7 +193,7 @@ class Mouse:
             (False, True,  True,  True ): 14,
             (True,  True,  True,  True ): 15,
         }
-        self.maze[self.x][self.y] = walls[*self.get_abs_walls()]
+        self.maze[self.x][self.y] = walls[self.get_abs_walls()]
 
     def fill_maze(self):
         self._fill_maze([[False for _ in range(SIZE)] for _ in range(SIZE)])
