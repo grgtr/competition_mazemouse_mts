@@ -65,7 +65,7 @@ class Mouse:
             self.y -= 1
         elif self.direction == "down":
             self.x += 1
-        time.sleep(0.05)
+        time.sleep(0.1)
 
     def turn_left(self):
         r = requests.post(self.url + "/robot-cells/left", params={"token": self.token})
